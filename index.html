@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Квиз №1: Плакат говорит с нами</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="pageQuiz">
+    <main class="container">
+      <header class="header">
+        <h1>Квиз «Плакат говорит с нами»</h1>
+        <p class="sub">
+          Военные плакаты отражали суть времени: что было самым важным, о чём нужно было напомнить фронту и тылу, во что верили
+          люди. Давайте попробуем “прочитать” плакаты и угадать, какой посыл стоял за ними. После каждого вопроса — короткое
+          объяснение.
+        </p>
+      </header>
+
+      <section class="card">
+        <div class="row">
+          <label class="label" for="studentName">Имя или команда (необязательно):</label>
+          <input id="studentName" class="input" type="text" placeholder="Например: Команда «Заречье»" />
+        </div>
+        <div class="row">
+          <label class="label" for="studentClass">Класс (необязательно):</label>
+          <input id="studentClass" class="input" type="text" placeholder="Например: 7А" />
+        </div>
+        <div class="row">
+          <button id="startBtn" class="btn btnPrimary">Начать квиз</button>
+          <button id="resetBtn" class="btn btnGhost" disabled>Сброс</button>
+        </div>
+      </section>
+
+      <section id="quiz" class="card hidden" aria-live="polite">
+        <div class="progress">
+          <div class="progressText" id="progressText">Вопрос 1/10</div>
+          <div class="progressBar">
+            <div class="progressStars" id="progressStars" aria-label="Прогресс"></div>
+          </div>
+        </div>
+
+        <h2 id="questionTitle" class="questionTitle"></h2>
+        <p id="questionPrompt" class="questionPrompt"></p>
+        <div id="answers" class="answers"></div>
+
+        <div id="feedback" class="feedback hidden">
+          <div id="feedbackStatus" class="feedbackStatus"></div>
+          <div id="feedbackExplain" class="feedbackExplain"></div>
+        </div>
+
+        <div class="row">
+          <button id="nextBtn" class="btn btnPrimary" disabled>Дальше</button>
+        </div>
+      </section>
+
+      <section id="result" class="card hidden">
+        <h2>Результат</h2>
+        <p id="resultText"></p>
+        <div id="reward" class="reward hidden">
+          <h3 class="rewardTitle">Твой плакат‑награда</h3>
+          <div class="rewardBody">
+            <img id="rewardImg" class="rewardImg" alt="" />
+            <div>
+              <div id="rewardCaption" class="rewardCaption"></div>
+              <div class="sub">Совет: сохрани результат картинкой и отправь учителю.</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <button id="downloadBtn" class="btn btnPrimary">Сохранить результат (PNG)</button>
+        </div>
+        <details class="details">
+          <summary>Показать ответы</summary>
+          <div id="resultDetails" class="resultDetails"></div>
+        </details>
+      </section>
+
+      <footer class="footer">
+        <p>Офлайн‑версия: откройте файл <code>index.html</code> в браузере.</p>
+      </footer>
+    </main>
+
+    <script src="./quiz-data.js"></script>
+    <script src="./quiz.js"></script>
+  </body>
+</html>
+
