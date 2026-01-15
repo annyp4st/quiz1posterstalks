@@ -254,7 +254,10 @@ function renderQuestion() {
       placeholder.value = "";
       placeholder.textContent = q.placeholder || "Выбери год…";
       placeholder.disabled = true;
-      placeholder.hidden = true;
+      placeholder.selected = true;
+      // Не скрываем placeholder: иначе некоторые браузеры показывают первый год,
+      // но фактически оставляют value="" (и ответ считается пустым).
+      placeholder.hidden = false;
       select.appendChild(placeholder);
 
       const years = q.years ?? ["1941", "1942", "1943", "1944", "1945"];
@@ -264,6 +267,7 @@ function renderQuestion() {
         opt.textContent = String(y);
         select.appendChild(opt);
       });
+      select.value = "";
       select.addEventListener("change", () => {
         textAnswerValue = select.value;
       });
@@ -287,11 +291,16 @@ function renderQuestion() {
       setTimeout(() => input.focus(), 0);
     }
 
+    control.classList.remove("inputCorrect", "inputWrong");
+    control.disabled = false;
+    currentAnswerControl = control;
+
     const checkBtn = document.createElement("button");
     checkBtn.type = "button";
     checkBtn.className = "btn btnGhost";
     checkBtn.textContent = "Проверить";
     checkBtn.addEventListener("click", () => checkTextAnswer());
+    currentCheckBtn = checkBtn;
 
     wrap.appendChild(control);
     wrap.appendChild(checkBtn);
@@ -344,6 +353,15 @@ function checkTextAnswer() {
   if (results.find((r) => r.id === q.id)) return;
   const raw = textAnswerValue ?? "";
   const given = normalizeAnswer(raw);
+
+  if (q.type === "year" && !given) {
+    feedbackEl.classList.remove("hidden");
+    feedbackStatusEl.textContent = "Выбери год";
+    feedbackStatusEl.className = "feedbackStatus bad";
+    feedbackExplainEl.textContent = "";
+    nextBtn.disabled = true;
+    return;
+  }
 
   const acceptable = (q.acceptableAnswers ?? []).map(normalizeAnswer);
   const ok = acceptable.includes(given);
