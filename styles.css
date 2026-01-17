@@ -434,3 +434,49 @@ code {
   border: 1px solid var(--line);
 }
 
+/* Стили для выбора квиза */
+.quiz-choice {
+  margin-bottom: 2rem;
+}
+
+.quiz-options {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.quiz-option {
+  flex: 1;
+  min-width: 250px;
+  padding: 1.5rem;
+  border: 2px solid #4a5568;
+  border-radius: 8px;
+  background: #1a202c;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.quiz-option:hover {
+  border-color: #4299e1;
+  background: #2d3748;
+  transform: translateY(-2px);
+}
+
+.quiz-option-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-option-desc {
+  font-size: 0.9rem;
+  color: #a0aec0;
+}
+
+/* Скрыть элементы */
+.hidden {
+  display: none !important;
+}
