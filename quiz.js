@@ -4,6 +4,7 @@ const quizChoiceEl = document.getElementById("quizChoice");
 const chooseOldQuizBtn = document.getElementById("chooseOldQuiz");
 const chooseNewQuizBtn = document.getElementById("chooseNewQuiz");
 const startSectionEl = document.getElementById("startSection");
+const quizTitleEl = document.querySelector("h1");
 
 // Текущий выбранный квиз (по умолчанию null)
 let currentQuiz = null;
@@ -561,6 +562,17 @@ function downloadPng(filename, text) {
   }, "image/png");
 }
 
+// Функция для обновления названия квиза
+function updateQuizTitle() {
+  if (window.QUIZ_DATA && window.QUIZ_DATA.title) {
+    const title = `Квиз «${window.QUIZ_DATA.title}»`;
+    if (quizTitleEl) {
+      quizTitleEl.textContent = title;
+    }
+    document.title = title;
+  }
+}
+
 // Обработчики выбора квиза
 if (chooseOldQuizBtn) {
   chooseOldQuizBtn.addEventListener("click", () => {
@@ -569,6 +581,7 @@ if (chooseOldQuizBtn) {
     hide(quizChoiceEl);
     show(startSectionEl);
     show(startBtn);
+    updateQuizTitle();
     if (chooseOldQuizBtn) chooseOldQuizBtn.classList.add("selected");
     if (chooseNewQuizBtn) chooseNewQuizBtn.classList.remove("selected");
   });
@@ -581,6 +594,7 @@ if (chooseNewQuizBtn) {
     hide(quizChoiceEl);
     show(startSectionEl);
     show(startBtn);
+    updateQuizTitle();
     if (chooseNewQuizBtn) chooseNewQuizBtn.classList.add("selected");
     if (chooseOldQuizBtn) chooseOldQuizBtn.classList.remove("selected");
   });
