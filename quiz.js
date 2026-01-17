@@ -1,5 +1,11 @@
 /* global QUIZ_DATA */
 
+const quizChoiceEl = document.getElementById("quizChoice");
+const chooseOldQuizBtn = document.getElementById("chooseOldQuiz");
+const chooseNewQuizBtn = document.getElementById("chooseNewQuiz");
+
+// Текущий выбранный квиз (по умолчанию null)
+let currentQuiz = null;
 const startBtn = document.getElementById("startBtn");
 const resetBtn = document.getElementById("resetBtn");
 const nextBtn = document.getElementById("nextBtn");
@@ -574,4 +580,5 @@ downloadBtn.addEventListener("click", () => {
 });
 
 resetState();
+
 
