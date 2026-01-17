@@ -15,7 +15,16 @@
         </p>
       </header>
 
-      <section class="card">
+      <section id="quizChoice" class="card">
+        <h2>Выбери квиз</h2>
+        <p class="sub">Выбери один из двух вариантов квиза:</p>
+        <div class="row" style="flex-direction: column; gap: 12px;">
+          <button id="chooseOldQuiz" class="btn btnPrimary">«Послание плаката» — что говорят плакаты</button>
+          <button id="chooseNewQuiz" class="btn btnPrimary">«История за плакатом» — секреты создания</button>
+        </div>
+      </section>
+
+      <section id="startSection" class="card hidden">
         <div class="row">
           <label class="label" for="studentName">Имя или команда (необязательно):</label>
           <input id="studentName" class="input" type="text" placeholder="Например: Команда «Заречье»" />
@@ -25,8 +34,8 @@
           <input id="studentClass" class="input" type="text" placeholder="Например: 7А" />
         </div>
         <div class="row">
-          <button id="startBtn" class="btn btnPrimary">Начать квиз</button>
-          <button id="resetBtn" class="btn btnGhost" disabled>Сброс</button>
+          <button id="startBtn" class="btn btnPrimary hidden">Начать квиз</button>
+          <button id="resetBtn" class="btn btnGhost" disabled>Начать заново квиз</button>
         </div>
       </section>
 

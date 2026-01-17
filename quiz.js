@@ -3,6 +3,7 @@
 const quizChoiceEl = document.getElementById("quizChoice");
 const chooseOldQuizBtn = document.getElementById("chooseOldQuiz");
 const chooseNewQuizBtn = document.getElementById("chooseNewQuiz");
+const startSectionEl = document.getElementById("startSection");
 
 // Текущий выбранный квиз (по умолчанию null)
 let currentQuiz = null;
@@ -136,10 +137,12 @@ function setReward(reward) {
 }
 
 function show(el) {
+  if (!el) return;
   el.classList.remove("hidden");
 }
 
 function hide(el) {
+  if (!el) return;
   el.classList.add("hidden");
 }
 
@@ -229,14 +232,15 @@ function resetState() {
   nextBtn.disabled = true;
   resetBtn.disabled = true;
   
-  // Показываем выбор квиза, скрываем кнопку "Начать"
+  // Показываем выбор квиза, скрываем секцию с кнопкой "Начать"
   show(quizChoiceEl);
+  hide(startSectionEl);
   hide(startBtn);
   currentQuiz = null;
   
   // Сбрасываем подсветку выбранных квизов
-  chooseOldQuizBtn.classList.remove("selected");
-  chooseNewQuizBtn.classList.remove("selected");
+  if (chooseOldQuizBtn) chooseOldQuizBtn.classList.remove("selected");
+  if (chooseNewQuizBtn) chooseNewQuizBtn.classList.remove("selected");
 }
 
 function renderQuestion() {
@@ -558,23 +562,29 @@ function downloadPng(filename, text) {
 }
 
 // Обработчики выбора квиза
-chooseOldQuizBtn.addEventListener("click", () => {
-  window.QUIZ_DATA = window.QUIZ_DATA_OLD;
-  currentQuiz = "old";
-  hide(quizChoiceEl);
-  show(startBtn);
-  chooseOldQuizBtn.classList.add("selected");
-  chooseNewQuizBtn.classList.remove("selected");
-});
+if (chooseOldQuizBtn) {
+  chooseOldQuizBtn.addEventListener("click", () => {
+    window.QUIZ_DATA = window.QUIZ_DATA_OLD;
+    currentQuiz = "old";
+    hide(quizChoiceEl);
+    show(startSectionEl);
+    show(startBtn);
+    if (chooseOldQuizBtn) chooseOldQuizBtn.classList.add("selected");
+    if (chooseNewQuizBtn) chooseNewQuizBtn.classList.remove("selected");
+  });
+}
 
-chooseNewQuizBtn.addEventListener("click", () => {
-  window.QUIZ_DATA = window.QUIZ_DATA_NEW;
-  currentQuiz = "new";
-  hide(quizChoiceEl);
-  show(startBtn);
-  chooseNewQuizBtn.classList.add("selected");
-  chooseOldQuizBtn.classList.remove("selected");
-});
+if (chooseNewQuizBtn) {
+  chooseNewQuizBtn.addEventListener("click", () => {
+    window.QUIZ_DATA = window.QUIZ_DATA_NEW;
+    currentQuiz = "new";
+    hide(quizChoiceEl);
+    show(startSectionEl);
+    show(startBtn);
+    if (chooseNewQuizBtn) chooseNewQuizBtn.classList.add("selected");
+    if (chooseOldQuizBtn) chooseOldQuizBtn.classList.remove("selected");
+  });
+}
 
 startBtn.addEventListener("click", () => {
   if (started || !currentQuiz) return;

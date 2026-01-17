@@ -335,7 +335,7 @@ window.QUIZ_DATA_NEW = {
       imageCaption: "Один из самых узнаваемых плакатов начала войны.",
       options: [
         { id: "a", text: "Алексей Кокорекин", correct: false },
-        { id: "b", text: "группа «Кукрыниксы»", correct: false },
+        { id: "b", text: "Кукрыниксы", correct: false },
         { id: "c", text: "Дмитрий Моор", correct: true },
       ],
       explain: "Плакат «Бей фашистского гада!» был создан художником Дмитрием Моором (Дмитрий Стахиевич Орлов) в 1941 году.",
@@ -394,9 +394,9 @@ window.QUIZ_DATA_NEW = {
       imageAlt: "Плакат «Все для фронта! Все для победы!»",
       imageCaption: "Лозунг, определивший жизнь тыла.",
       options: [
-        { id: "a", text: "июнь 1941 года", correct: false },
-        { id: "b", text: "июль 1941 года", correct: true },
-        { id: "c", text: "август 1941 года", correct: false },
+        { id: "a", text: "Июнь 1941 года", correct: false },
+        { id: "b", text: "Июль 1941 года", correct: true },
+        { id: "c", text: "Август 1941 года", correct: false },
       ],
       explain: "Лозунг «Все для фронта, все для победы!» был провозглашён И.В. Сталиным в его выступлении по радио 3 июля 1941 года.",
     },
@@ -405,7 +405,7 @@ window.QUIZ_DATA_NEW = {
       type: "choice",
       title: "Плакат «Наша Правда! Бейтесь до смерти!» - обращение к славе минувших поколений, опора на авторитет легендарных полководцев. Чей образ использовал Виктор Иванов в плакате?",
       prompt: "Выбери легендарного полководца.",
-      image: "./assets/posters/pust-vdohnovlyaet-vas-v-etoy-voyne-muzhestvennyy-obraz-nashih-velikih-predkov-i-v-stalin-1941.jpg",
+      image: "./assets/posters/nasha-pravda-boytes-do-smerti-564x850.jpg",
       imageAlt: "Плакат с изображением исторических героев",
       imageCaption: "Плакат с исторической параллелью, включая Александра Невского.",
       options: [
@@ -439,7 +439,7 @@ window.QUIZ_DATA_NEW = {
       imageAlt: "Плакат «Дойдём до Берлина!»",
       imageCaption: "Плакат с образом героя-снайпера Василия Голосова.",
       options: [
-        { id: "a", text: "участвовал", correct: false },
+        { id: "a", text: "Участвовал", correct: false },
         { id: "b", text: "Нет, он погиб раньше", correct: true },
       ],
       explain: "Василий Голосов, прообраз солдата на плакатах, был выдающимся снайпером, но погиб 16 августа 1943 года и не участвовал в битве за Берлин. Его образ использован как символ всех солдат, дошедших до Победы.",
