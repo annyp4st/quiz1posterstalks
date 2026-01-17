@@ -43,11 +43,11 @@ let posterWrapEl = null;
 function getCorrectText(q) {
   if (q.type === "choice") {
     const correctOpt = (q.options ?? []).find((o) => o.correct);
-    return correctOpt?.text ?? "—";
+    return correctOpt?.text ?? "-";
   }
   // text/year
   const acc = q.acceptableAnswers ?? [];
-  if (acc.length === 0) return "—";
+  if (acc.length === 0) return "-";
   return acc.join(" / ");
 }
 
@@ -104,8 +104,8 @@ function getPraise(correct, total) {
   if (total <= 0) return "Спасибо за участие!";
   const ratio = correct / total;
   if (ratio >= 0.85) return "Молодец! Ты отлично знаешь тему.";
-  if (ratio >= 0.6) return "Очень хорошо! Ты многое знаешь — продолжай.";
-  return "Ничего страшного — тебя много интересного ждёт впереди. Попробуй ещё раз!";
+  if (ratio >= 0.6) return "Очень хорошо! Ты многое знаешь - продолжай.";
+  return "Ничего страшного - тебя много интересного ждёт впереди. Попробуй ещё раз!";
 }
 
 function pickReward(ratio) {
@@ -401,7 +401,7 @@ function checkTextAnswer() {
   if (currentCheckBtn) currentCheckBtn.disabled = true;
 
   const existing = results.find((r) => r.id === q.id);
-  const record = { id: q.id, title: q.title, chosenId: "text", chosenText: raw.trim() ? raw.trim() : "—", correct: ok };
+  const record = { id: q.id, title: q.title, chosenId: "text", chosenText: raw.trim() ? raw.trim() : "-", correct: ok };
   if (existing) Object.assign(existing, record);
   else results.push(record);
   renderProgressStars();
@@ -447,7 +447,7 @@ function finalize() {
     div.className = "resultItem";
     div.innerHTML = `
       <div><strong>${i + 1}. ${escapeHtml(q.title)}</strong></div>
-      <div>Ваш ответ: ${escapeHtml(r?.chosenText ?? "—")}</div>
+      <div>Ваш ответ: ${escapeHtml(r?.chosenText ?? "-")}</div>
       <div>Правильный: ${escapeHtml(getCorrectText(q))}</div>
     `;
     resultDetailsEl.appendChild(div);
@@ -481,7 +481,7 @@ function buildExportText() {
   QUIZ_DATA.questions.forEach((q, i) => {
     const r = results.find((x) => x.id === q.id);
     lines.push(`${i + 1}. ${q.title}`);
-    lines.push(`   Ваш ответ: ${r?.chosenText ?? "—"}`);
+    lines.push(`   Ваш ответ: ${r?.chosenText ?? "-"}`);
     lines.push(`   Правильный: ${getCorrectText(q)}`);
     lines.push("");
   });
@@ -642,3 +642,4 @@ document.addEventListener("DOMContentLoaded", () => {
   
   resetState();
 });
+
