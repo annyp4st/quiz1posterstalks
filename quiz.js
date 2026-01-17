@@ -228,6 +228,15 @@ function resetState() {
   feedbackEl.classList.add("hidden");
   nextBtn.disabled = true;
   resetBtn.disabled = true;
+  
+  // Показываем выбор квиза, скрываем кнопку "Начать"
+  show(quizChoiceEl);
+  hide(startBtn);
+  currentQuiz = null;
+  
+  // Сбрасываем подсветку выбранных квизов
+  chooseOldQuizBtn.classList.remove("selected");
+  chooseNewQuizBtn.classList.remove("selected");
 }
 
 function renderQuestion() {
@@ -393,192 +402,4 @@ function checkTextAnswer() {
   renderProgressStars();
 }
 
-function escapeHtml(s) {
-  return String(s)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function finalize() {
-  const total = QUIZ_DATA.questions.length;
-  const correct = results.filter((r) => r.correct).length;
-  const name = studentNameEl.value?.trim();
-  const cls = studentClassEl.value?.trim();
-  const who = name || "________";
-  const classText = cls || "____";
-  const ratio = total > 0 ? correct / total : 0;
-  const reward = pickReward(ratio);
-  setReward(reward);
-
-  const header = [
-    `Результат квиза «${QUIZ_DATA.title ?? "Квиз"}»`,
-    `Участник/команда: ${who}`,
-    `Класс: ${classText}`,
-    `Дата: ${new Date().toLocaleString("ru-RU")}`,
-    `Итог: ${correct}/${total}`,
-    `Звёзды: ${buildStarLine()}`,
-    getPraise(correct, total),
-    reward?.title ? `Плакат‑награда: ${reward.title}` : null,
-  ].filter(Boolean);
-
-  resultTextEl.textContent = header.join("\n");
-
-  resultDetailsEl.innerHTML = "";
-  QUIZ_DATA.questions.forEach((q, i) => {
-    const r = results.find((x) => x.id === q.id);
-    const div = document.createElement("div");
-    div.className = "resultItem";
-    div.innerHTML = `
-      <div><strong>${i + 1}. ${escapeHtml(q.title)}</strong></div>
-      <div>Ваш ответ: ${escapeHtml(r?.chosenText ?? "—")}</div>
-      <div>Правильный: ${escapeHtml(getCorrectText(q))}</div>
-    `;
-    resultDetailsEl.appendChild(div);
-  });
-
-  hide(quizEl);
-  show(resultEl);
-}
-
-function buildExportText() {
-  const total = QUIZ_DATA.questions.length;
-  const correct = results.filter((r) => r.correct).length;
-  const name = studentNameEl.value?.trim();
-  const cls = studentClassEl.value?.trim();
-  const who = name || "________";
-  const classText = cls || "____";
-  const ratio = total > 0 ? correct / total : 0;
-  const reward = pickReward(ratio);
-  const lines = [];
-
-  lines.push(`Результат квиза «${QUIZ_DATA.title ?? "Квиз"}»`);
-  lines.push(`Участник/команда: ${who}`);
-  lines.push(`Класс: ${classText}`);
-  lines.push(`Дата: ${new Date().toLocaleString("ru-RU")}`);
-  lines.push(`Итог: ${correct}/${total}`);
-  lines.push(`Звёзды: ${buildStarLine()}`);
-  lines.push(getPraise(correct, total));
-  if (reward?.title) lines.push(`Плакат‑награда: ${reward.title}`);
-  lines.push("");
-
-  QUIZ_DATA.questions.forEach((q, i) => {
-    const r = results.find((x) => x.id === q.id);
-    lines.push(`${i + 1}. ${q.title}`);
-    lines.push(`   Ваш ответ: ${r?.chosenText ?? "—"}`);
-    lines.push(`   Правильный: ${getCorrectText(q)}`);
-    lines.push("");
-  });
-  return lines.join("\n");
-}
-
-function wrapLines(ctx, text, maxWidthPx) {
-  const out = [];
-  const rawLines = String(text).replaceAll("\r\n", "\n").split("\n");
-  for (const raw of rawLines) {
-    if (!raw) {
-      out.push("");
-      continue;
-    }
-    const words = raw.split(" ");
-    let line = "";
-    for (const w of words) {
-      const candidate = line ? `${line} ${w}` : w;
-      if (ctx.measureText(candidate).width <= maxWidthPx) line = candidate;
-      else {
-        if (line) out.push(line);
-        line = w;
-      }
-    }
-    out.push(line);
-  }
-  return out;
-}
-
-function downloadPng(filename, text) {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    alert("Не удалось сохранить картинкой на этом устройстве.");
-    return;
-  }
-
-  const width = 1080;
-  const padding = 60;
-  const fontSize = 26;
-  const lineHeight = Math.round(fontSize * 1.35);
-
-  ctx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`;
-  const maxTextWidth = width - padding * 2;
-  const lines = wrapLines(ctx, text, maxTextWidth);
-  const height = padding * 2 + 56 + lines.length * lineHeight + 20;
-
-  canvas.width = width;
-  canvas.height = height;
-
-  ctx.fillStyle = "#0b1220";
-  ctx.fillRect(0, 0, width, height);
-
-  ctx.fillStyle = "#121c33";
-  ctx.fillRect(0, 0, width, 56);
-  ctx.fillStyle = "#eef3ff";
-  ctx.font = `700 20px "Segoe UI", system-ui, -apple-system, Arial, sans-serif`;
-  ctx.fillText("Результат квиза (скрин для учителя)", padding, 36);
-
-  ctx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`;
-  ctx.fillStyle = "#eef3ff";
-  let y = padding + 56;
-  for (const line of lines) {
-    y += lineHeight;
-    ctx.fillText(line, padding, y);
-  }
-
-  canvas.toBlob((blob) => {
-    if (!blob) return;
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  }, "image/png");
-}
-
-startBtn.addEventListener("click", () => {
-  if (started) return;
-  started = true;
-  resetBtn.disabled = false;
-  show(quizEl);
-  hide(resultEl);
-  renderQuestion();
-});
-
-resetBtn.addEventListener("click", () => {
-  resetState();
-});
-
-nextBtn.addEventListener("click", () => {
-  const q = QUIZ_DATA.questions[idx];
-  if (q.type === "choice" && !selectedOptionId) return;
-  if ((q.type === "text" || q.type === "year") && results.find((r) => r.id === q.id) == null) return;
-  if (idx < QUIZ_DATA.questions.length - 1) {
-    idx += 1;
-    renderQuestion();
-  } else {
-    finalize();
-  }
-});
-
-downloadBtn.addEventListener("click", () => {
-  const txt = buildExportText();
-  const safeDate = new Date().toISOString().slice(0, 10);
-  downloadPng(`result_quiz_${safeDate}.png`, txt);
-});
-
-resetState();
-
-
+function escape
